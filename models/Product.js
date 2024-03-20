@@ -18,6 +18,9 @@ const productSchema = new Schema(
     expiryDate: {
       type: String,
     },
+    offerPrice: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
