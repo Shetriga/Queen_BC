@@ -45,3 +45,18 @@ exports.postProduct = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.deleteProduct = async (req, res, next) => {
+  const productId = req.params.pid;
+  try {
+    const foundProduct = await Product.findById(productId);
+    if (!foundProduct) return res.sendStatus(404);
+
+    await foundProduct.deleteOne();
+    res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
