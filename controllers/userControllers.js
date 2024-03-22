@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const Customer = require("../models/Customer");
 const { validationResult } = require("express-validator");
 
 exports.getAllProducts = async (req, res, next) => {
@@ -90,6 +91,21 @@ exports.putProduct = async (req, res, next) => {
     await foundProduct.save();
 
     res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.getCustomers = async (req, res, next) => {
+  try {
+    const foundUsers = await Customer.find({});
+    if (!foundUsers) return res.sendStatus(404);
+
+    res.status(200).json({
+      users: foundUsers,
+    });
   } catch (e) {
     const error = new Error(e.message);
     error.statusCode = 500;
