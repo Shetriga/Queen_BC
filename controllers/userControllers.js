@@ -23,7 +23,7 @@ exports.postProduct = async (req, res, next) => {
     });
   }
 
-  const { name, quantity, unitPrice, expiryDate } = req.body;
+  const { name, quantity, unitPrice, expiryDate, offerPrice } = req.body;
   try {
     const newProduct = new Product({
       name,
@@ -32,6 +32,9 @@ exports.postProduct = async (req, res, next) => {
     });
     if (expiryDate !== null) {
       newProduct.expiryDate = expiryDate;
+    }
+    if (offerPrice !== null) {
+      newProduct.offerPrice = offerPrice;
     }
 
     await newProduct.save();
@@ -53,6 +56,35 @@ exports.deleteProduct = async (req, res, next) => {
     if (!foundProduct) return res.sendStatus(404);
 
     await foundProduct.deleteOne();
+    res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.putProduct = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+
+  const productId = req.params.pid;
+  const { name, quantity, unitPrice, expiryDate, offerPrice } = req.body;
+  try {
+    const foundProduct = await Product.findById(productId);
+    if (!foundProduct) return res.sendStatus(404);
+
+    foundProduct.name = name;
+    foundProduct.quantity = quantity;
+    foundProduct.unitPrice = unitPrice;
+    foundProduct.expiryDate = expiryDate;
+    foundProduct.offerPrice = offerPrice;
+    await foundProduct.save();
+
     res.sendStatus(200);
   } catch (e) {
     const error = new Error(e.message);
