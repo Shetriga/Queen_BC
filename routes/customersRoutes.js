@@ -6,7 +6,7 @@ const {
 const { postNewCustomerValidations } = require("../validations/customer");
 const router = express.Router();
 
-router.route("/", getCustomers);
+router.get("/", getCustomers);
 
 router.post("/new/customer", postNewCustomerValidations, postNewCustomer);
 
