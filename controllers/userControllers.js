@@ -81,8 +81,12 @@ exports.putProduct = async (req, res, next) => {
     foundProduct.name = name;
     foundProduct.quantity = quantity;
     foundProduct.unitPrice = unitPrice;
-    foundProduct.expiryDate = expiryDate;
-    foundProduct.offerPrice = offerPrice;
+    if (expiryDate) {
+      foundProduct.expiryDate = expiryDate;
+    }
+    if (offerPrice) {
+      foundProduct.offerPrice = offerPrice;
+    }
     await foundProduct.save();
 
     res.sendStatus(200);
