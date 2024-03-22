@@ -112,3 +112,26 @@ exports.getCustomers = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.postNewCustomer = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+
+  const { name, phone } = req.body;
+  try {
+    const newCustomer = new Customer({
+      name,
+      phone,
+    });
+    await newCustomer.save();
+    res.sendStatus(201);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
