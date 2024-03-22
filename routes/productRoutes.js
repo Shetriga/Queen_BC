@@ -3,6 +3,7 @@ const {
   getAllProducts,
   postProduct,
   deleteProduct,
+  putProduct,
 } = require("../controllers/userControllers");
 const {
   postProductValidations,
@@ -16,6 +17,6 @@ router.post("/product", postProductValidations, postProduct);
 
 router.delete("/:pid", deleteProduct);
 
-router.put("/:pid", putProductValidations);
+router.put("/:pid", putProductValidations, putProduct);
 
 module.exports = router;
