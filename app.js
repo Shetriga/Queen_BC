@@ -5,6 +5,7 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const customerRoutes = require("./routes/customersRoutes");
+const servicesRoutes = require("./routes/servicesRoutes");
 const bodyParser = require("body-parser");
 
 app.use((req, res, next) => {
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/auth", authRoutes);
 app.use("/product", productRoutes);
 app.use("/customer", customerRoutes);
+app.use("/service", servicesRoutes);
 
 // Error Handler
 app.use((error, req, res, next) => {

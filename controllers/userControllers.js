@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const Customer = require("../models/Customer");
+const Service = require("../models/Service");
 const { validationResult } = require("express-validator");
 
 exports.getAllProducts = async (req, res, next) => {
@@ -128,6 +129,48 @@ exports.postNewCustomer = async (req, res, next) => {
       phone,
     });
     await newCustomer.save();
+    res.sendStatus(201);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.getAllServices = async (req, res, next) => {
+  try {
+    const foundServices = await Service.find({});
+    if (!foundServices) return res.sendStatus(404);
+
+    res.status(200).json({
+      services: foundServices,
+    });
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.postNewService = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+
+  const { name, fee, offerFee } = req.body;
+  try {
+    const newService = new Service({
+      serviceName: name,
+      fee,
+    });
+    if (offerFee) {
+      newService.offerFee = offerFee;
+    }
+
+    await newService.save();
     res.sendStatus(201);
   } catch (e) {
     const error = new Error(e.message);
