@@ -20,6 +20,7 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PATCH, DELETE, PUT"
   );
+  res.setHeader("Content-Security-Policy", "upgrade-insecure-requests");
   next();
 });
 
