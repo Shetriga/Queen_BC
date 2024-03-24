@@ -14,7 +14,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, https://6600b13b430d3e39b8cca262--earnest-cactus-b8a1b9.netlify.app/"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
