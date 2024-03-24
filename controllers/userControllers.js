@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 const Customer = require("../models/Customer");
 const Service = require("../models/Service");
+const Reservation = require("../models/reservation");
 const { validationResult } = require("express-validator");
 
 exports.getAllProducts = async (req, res, next) => {
@@ -187,6 +188,59 @@ exports.deleteService = async (req, res, next) => {
 
     await foundService.deleteOne();
     res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.getAllReservations = async (req, res, next) => {
+  try {
+    const foundReservations = await Reservation.find({});
+    if (!foundReservations) return res.sendStatus(404);
+
+    res.status(200).json({
+      reservations: foundReservations,
+    });
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.postNewReservation = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+
+  const { name, phone, action, date, deposite, remaining, total, notes } =
+    req.body;
+  try {
+    const newReservation = new Reservation({
+      name,
+      action,
+      date,
+      total,
+    });
+    if (phone) {
+      newReservation.phone = phone;
+    }
+    if (deposite) {
+      newReservation.deposite = deposite;
+    }
+    if (remaining) {
+      newReservation.remaining = remaining;
+    }
+    if (notes) {
+      newReservation.notes = notes;
+    }
+    await newReservation.save();
+    res.sendStatus(201);
   } catch (e) {
     const error = new Error(e.message);
     error.statusCode = 500;
