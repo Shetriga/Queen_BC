@@ -226,6 +226,7 @@ exports.postNewReservation = async (req, res, next) => {
       action,
       date,
       total,
+      remaining,
       status: "غير مكتمل",
     });
     if (phone) {
@@ -233,9 +234,6 @@ exports.postNewReservation = async (req, res, next) => {
     }
     if (deposite) {
       newReservation.deposite = deposite;
-    }
-    if (remaining) {
-      newReservation.remaining = remaining;
     }
     if (notes) {
       newReservation.notes = notes;

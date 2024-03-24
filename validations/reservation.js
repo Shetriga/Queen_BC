@@ -5,4 +5,5 @@ exports.postNewReservationValidations = [
   check("action", "Action is missing").notEmpty(),
   check("date", "Date is missing").notEmpty(),
   check("total", "Total is missing").notEmpty(),
+  check("remaining", "Remaining is missing").notEmpty(),
 ];
