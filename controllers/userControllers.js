@@ -178,3 +178,18 @@ exports.postNewService = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.deleteService = async (req, res, next) => {
+  const serviceId = req.params.sid;
+  try {
+    const foundService = await Service.findById(serviceId);
+    if (!foundService) return res.sendStatus(404);
+
+    await foundService.deleteOne();
+    res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
