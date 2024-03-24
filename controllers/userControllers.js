@@ -226,6 +226,7 @@ exports.postNewReservation = async (req, res, next) => {
       action,
       date,
       total,
+      status: "غير مكتمل",
     });
     if (phone) {
       newReservation.phone = phone;
