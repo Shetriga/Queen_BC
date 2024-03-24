@@ -8,11 +8,22 @@ const customerRoutes = require("./routes/customersRoutes");
 const servicesRoutes = require("./routes/servicesRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const bodyParser = require("body-parser");
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin:
+      "https://6600b13b430d3e39b8cca262--earnest-cactus-b8a1b9.netlify.app/",
+  })
+);
 
 // CORS Policy headers and permissions
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PATCH, DELETE, PUT"
