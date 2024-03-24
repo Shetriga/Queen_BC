@@ -4,11 +4,20 @@ const {
   postNewCustomer,
 } = require("../controllers/userControllers");
 const { postNewCustomerValidations } = require("../validations/customer");
-const { authorizedAdmin } = require("../middleware/Authorizations");
+const {
+  authorizedAdmin,
+  authorizedOwnerOrAdmin,
+  authorizedOwner,
+} = require("../middleware/Authorizations");
 const router = express.Router();
 
-router.get("/", authorizedAdmin, getCustomers);
+router.get("/", authorizedOwnerOrAdmin, getCustomers);
 
-router.post("/new/customer", postNewCustomerValidations, postNewCustomer);
+router.post(
+  "/new/customer",
+  authorizedOwner,
+  postNewCustomerValidations,
+  postNewCustomer
+);
 
 module.exports = router;

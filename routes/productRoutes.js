@@ -9,14 +9,18 @@ const {
   postProductValidations,
   putProductValidations,
 } = require("../validations/product");
+const {
+  authorizedOwnerOrAdmin,
+  authorizedOwner,
+} = require("../middleware/Authorizations");
 const router = express.Router();
 
-router.get("/all/products", getAllProducts);
+router.get("/all/products", authorizedOwnerOrAdmin, getAllProducts);
 
-router.post("/product", postProductValidations, postProduct);
+router.post("/product", authorizedOwner, postProductValidations, postProduct);
 
-router.delete("/:pid", deleteProduct);
+router.delete("/:pid", authorizedOwner, deleteProduct);
 
-router.put("/:pid", putProductValidations, putProduct);
+router.put("/:pid", authorizedOwner, putProductValidations, putProduct);
 
 module.exports = router;
