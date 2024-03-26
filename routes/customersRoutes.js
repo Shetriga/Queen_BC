@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getCustomers,
   postNewCustomer,
+  putCustomer,
 } = require("../controllers/userControllers");
 const { postNewCustomerValidations } = require("../validations/customer");
 const {
@@ -15,9 +16,16 @@ router.get("/", authorizedOwnerOrAdmin, getCustomers);
 
 router.post(
   "/new/customer",
-  authorizedOwner,
+  authorizedOwnerOrAdmin,
   postNewCustomerValidations,
   postNewCustomer
+);
+
+router.put(
+  "/:cid",
+  authorizedOwnerOrAdmin,
+  postNewCustomerValidations,
+  putCustomer
 );
 
 module.exports = router;

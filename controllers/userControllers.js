@@ -246,3 +246,28 @@ exports.postNewReservation = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.putCustomer = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+
+  const { name, phone } = req.body;
+  const customerId = req.params.cid;
+  try {
+    const foundCustomer = await Customer.findById(customerId);
+    if (!foundCustomer) return res.sendStatus(404);
+
+    foundCustomer.name = name;
+    foundCustomer.phone = phone;
+    await foundCustomer.save();
+    res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
