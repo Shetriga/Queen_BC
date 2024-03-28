@@ -4,6 +4,7 @@ const Service = require("../models/Service");
 const Reservation = require("../models/reservation");
 const ProductSale = require("../models/ProductSale");
 const { validationResult } = require("express-validator");
+const { deductTotalQuantity } = require("../utils/Products");
 
 exports.getAllProducts = async (req, res, next) => {
   try {
@@ -288,6 +289,16 @@ exports.postProductSale = async (req, res, next) => {
   today = mm + "/" + dd + "/" + yyyy;
 
   const { products, orderTotal, notes, unitPrice } = req.body;
+
+  let array = [];
+  products.foreach((e) => {
+    array.push({
+      id: e.id,
+      quantity: e.productQuantity,
+    });
+  });
+  await deductTotalQuantity(array);
+
   try {
     const newProductSale = new ProductSale({
       products,
