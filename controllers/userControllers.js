@@ -303,11 +303,11 @@ exports.postProductSale = async (req, res, next) => {
 
     await newProductSale.save();
 
-    products.foreach(async (e) => {
-      const found = await Product.findById(e.id);
-      found.quantity -= e.productQuantity;
+    for (let i = 0; i < products.length; i++) {
+      const found = await Product.findById(products[i].id);
+      found.quantity -= products[i].productQuantity;
       await found.save();
-    });
+    }
 
     res.sendStatus(201);
   } catch (e) {
