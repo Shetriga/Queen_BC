@@ -287,11 +287,12 @@ exports.postProductSale = async (req, res, next) => {
 
   today = mm + "/" + dd + "/" + yyyy;
 
-  const { products, orderTotal, notes } = req.body;
+  const { products, orderTotal, notes, unitPrice } = req.body;
   try {
     const newProductSale = new ProductSale({
       products,
       orderTotal,
+      unitPrice,
       orderDate: today,
     });
     if (notes) {
