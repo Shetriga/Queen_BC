@@ -290,15 +290,6 @@ exports.postProductSale = async (req, res, next) => {
 
   const { products, orderTotal, notes, unitPrice } = req.body;
 
-  let array = [];
-  products.foreach((e) => {
-    array.push({
-      id: e.id,
-      quantity: e.productQuantity,
-    });
-  });
-  deductTotalQuantity(array);
-
   try {
     const newProductSale = new ProductSale({
       products,
@@ -311,6 +302,13 @@ exports.postProductSale = async (req, res, next) => {
     }
 
     await newProductSale.save();
+
+    products.foreach(async (e) => {
+      const found = await Product.findById(e.id);
+      found.quantity -= e.productQuantity;
+      await found.save();
+    });
+
     res.sendStatus(201);
   } catch (e) {
     const error = new Error(e.message);
