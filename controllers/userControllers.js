@@ -297,7 +297,7 @@ exports.postProductSale = async (req, res, next) => {
       quantity: e.productQuantity,
     });
   });
-  await deductTotalQuantity(array);
+  deductTotalQuantity(array);
 
   try {
     const newProductSale = new ProductSale({
