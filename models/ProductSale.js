@@ -9,6 +9,10 @@ const productSaleSchema = new Schema({
         ref: "Product",
         required: true,
       },
+      unitPrice: {
+        type: Number,
+        required: true,
+      },
       productQuantity: {
         type: Number,
         required: true,
