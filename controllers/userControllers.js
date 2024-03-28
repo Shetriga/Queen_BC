@@ -2,6 +2,7 @@ const Product = require("../models/Product");
 const Customer = require("../models/Customer");
 const Service = require("../models/Service");
 const Reservation = require("../models/reservation");
+const ProductSale = require("../models/ProductSale");
 const { validationResult } = require("express-validator");
 
 exports.getAllProducts = async (req, res, next) => {
@@ -265,6 +266,40 @@ exports.putCustomer = async (req, res, next) => {
     foundCustomer.phone = phone;
     await foundCustomer.save();
     res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.postProductSale = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, "0");
+  let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  let yyyy = today.getFullYear();
+
+  today = mm + "/" + dd + "/" + yyyy;
+
+  const { products, orderTotal, notes } = req.body;
+  try {
+    const newProductSale = new ProductSale({
+      products,
+      orderTotal,
+      orderDate: today,
+    });
+    if (notes) {
+      newProductSale.notes = notes;
+    }
+
+    await newProductSale.save();
+    res.sendStatus(201);
   } catch (e) {
     const error = new Error(e.message);
     error.statusCode = 500;

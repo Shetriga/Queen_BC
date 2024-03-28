@@ -11,3 +11,8 @@ exports.putProductValidations = [
   check("quantity", "Quantity is missing").notEmpty(),
   check("unitPrice", "Unit Price is missing").notEmpty(),
 ];
+
+exports.postProductSaleValidations = [
+  check("products", "Products are missing").notEmpty(),
+  check("orderTotal", "Order Total are missing").notEmpty(),
+];

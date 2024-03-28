@@ -4,10 +4,12 @@ const {
   postProduct,
   deleteProduct,
   putProduct,
+  postProductSale,
 } = require("../controllers/userControllers");
 const {
   postProductValidations,
   putProductValidations,
+  postProductSaleValidations,
 } = require("../validations/product");
 const {
   authorizedOwnerOrAdmin,
@@ -22,5 +24,7 @@ router.post("/product", authorizedOwner, postProductValidations, postProduct);
 router.delete("/:pid", authorizedOwner, deleteProduct);
 
 router.put("/:pid", authorizedOwner, putProductValidations, putProduct);
+
+router.post("/sale", postProductSaleValidations, postProductSale);
 
 module.exports = router;
