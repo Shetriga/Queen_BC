@@ -9,12 +9,20 @@ const serviceSaleSchema = new Schema({
         ref: "Service",
         required: true,
       },
+      serviceName: {
+        type: String,
+        required: true,
+      },
       serviceFee: {
         type: Number,
         required: true,
       },
     },
   ],
+  customerId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+  },
   orderTotal: {
     type: Number,
     required: true,

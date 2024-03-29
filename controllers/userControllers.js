@@ -332,11 +332,12 @@ exports.postServiceSale = async (req, res, next) => {
 
   today = mm + "/" + dd + "/" + yyyy;
 
-  const { services, orderTotal, notes } = req.body;
+  const { services, orderTotal, notes, customerId } = req.body;
 
   try {
     const newServiceSale = new ServiceSale({
       services,
+      customerId,
       orderTotal,
       orderDate: today,
     });

@@ -8,4 +8,5 @@ exports.postNewServiceValidations = [
 exports.postServiceSaleValidations = [
   check("services", "Services are missing").notEmpty(),
   check("orderTotal", "Order Total are missing").notEmpty(),
+  check("customerId", "Customer Id are missing").notEmpty(),
 ];
