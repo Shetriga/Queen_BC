@@ -411,3 +411,19 @@ exports.getAllServicesSales = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.putMarkReservationAsDone = async (req, res, next) => {
+  const reservationId = req.params.rid;
+  try {
+    const foundReservation = await Reservation.findById(reservationId);
+    if (!foundReservation) return res.sendStatus(404);
+
+    foundReservation.status = "مكتمل";
+    await foundReservation.save();
+    res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
