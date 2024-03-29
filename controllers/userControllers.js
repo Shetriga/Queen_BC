@@ -3,6 +3,7 @@ const Customer = require("../models/Customer");
 const Service = require("../models/Service");
 const Reservation = require("../models/reservation");
 const ProductSale = require("../models/ProductSale");
+const ServiceSale = require("../models/ServiceSale");
 const { validationResult } = require("express-validator");
 const { deductTotalQuantity } = require("../utils/Products");
 
@@ -308,6 +309,42 @@ exports.postProductSale = async (req, res, next) => {
       found.quantity -= products[i].productQuantity;
       await found.save();
     }
+
+    res.sendStatus(201);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.postServiceSale = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, "0");
+  let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  let yyyy = today.getFullYear();
+
+  today = mm + "/" + dd + "/" + yyyy;
+
+  const { services, orderTotal, notes } = req.body;
+
+  try {
+    const newServiceSale = new ServiceSale({
+      services,
+      orderTotal,
+      orderDate: today,
+    });
+    if (notes) {
+      newServiceSale.notes = notes;
+    }
+
+    await newServiceSale.save();
 
     res.sendStatus(201);
   } catch (e) {

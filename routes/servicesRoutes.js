@@ -3,8 +3,12 @@ const {
   getAllServices,
   postNewService,
   deleteService,
+  postServiceSale,
 } = require("../controllers/userControllers");
-const { postNewServiceValidations } = require("../validations/service");
+const {
+  postNewServiceValidations,
+  postServiceSaleValidations,
+} = require("../validations/service");
 const {
   authorizedOwner,
   authorizedOwnerOrAdmin,
@@ -21,5 +25,12 @@ router.post(
 );
 
 router.delete("/:sid", authorizedOwner, deleteService);
+
+router.post(
+  "/sale",
+  authorizedOwnerOrAdmin,
+  postServiceSaleValidations,
+  postServiceSale
+);
 
 module.exports = router;

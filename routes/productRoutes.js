@@ -14,6 +14,7 @@ const {
 const {
   authorizedOwnerOrAdmin,
   authorizedOwner,
+  authorizedAdmin,
 } = require("../middleware/Authorizations");
 const router = express.Router();
 
@@ -25,6 +26,11 @@ router.delete("/:pid", authorizedOwner, deleteProduct);
 
 router.put("/:pid", authorizedOwner, putProductValidations, putProduct);
 
-router.post("/sale", postProductSaleValidations, postProductSale);
+router.post(
+  "/sale",
+  authorizedOwnerOrAdmin,
+  postProductSaleValidations,
+  postProductSale
+);
 
 module.exports = router;
