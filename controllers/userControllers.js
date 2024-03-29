@@ -396,3 +396,18 @@ exports.getAllProductSales = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.getAllServicesSales = async (req, res, next) => {
+  try {
+    const foundServices = await ServiceSale.find({});
+    if (!foundServices) return res.sendStatus(404);
+
+    res.status(200).json({
+      serviceSales: foundServices,
+    });
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};

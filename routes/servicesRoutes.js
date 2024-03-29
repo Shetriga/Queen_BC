@@ -5,6 +5,7 @@ const {
   deleteService,
   postServiceSale,
   putService,
+  getAllServicesSales,
 } = require("../controllers/userControllers");
 const {
   postNewServiceValidations,
@@ -36,5 +37,7 @@ router.post(
   postServiceSaleValidations,
   postServiceSale
 );
+
+router.get("/all/sales", authorizedOwnerOrAdmin, getAllServicesSales);
 
 module.exports = router;
