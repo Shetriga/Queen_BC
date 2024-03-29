@@ -5,7 +5,6 @@ const Reservation = require("../models/reservation");
 const ProductSale = require("../models/ProductSale");
 const ServiceSale = require("../models/ServiceSale");
 const { validationResult } = require("express-validator");
-const { deductTotalQuantity } = require("../utils/Products");
 
 exports.getAllProducts = async (req, res, next) => {
   try {
@@ -348,6 +347,49 @@ exports.postServiceSale = async (req, res, next) => {
     await newServiceSale.save();
 
     res.sendStatus(201);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.putService = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+
+  const serviceId = req.params.sid;
+  const { name, fee, offerFee } = req.body;
+
+  try {
+    const foundService = await Service.findById(serviceId);
+    if (!foundService) return res.sendStatus(404);
+
+    foundService.name = name;
+    foundService.fee = fee;
+    foundService.offerFee = offerFee;
+
+    await foundService.save();
+    res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.getAllProductSales = async (req, res, next) => {
+  try {
+    const foundSales = await ProductSale.find({});
+    if (!foundSales) return res.sendStatus(404);
+
+    res.status(200).json({
+      productSales: foundSales,
+    });
   } catch (e) {
     const error = new Error(e.message);
     error.statusCode = 500;

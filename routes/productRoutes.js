@@ -5,6 +5,7 @@ const {
   deleteProduct,
   putProduct,
   postProductSale,
+  getAllProductSales,
 } = require("../controllers/userControllers");
 const {
   postProductValidations,
@@ -32,5 +33,7 @@ router.post(
   postProductSaleValidations,
   postProductSale
 );
+
+router.get("/all/sales", authorizedOwnerOrAdmin, getAllProductSales);
 
 module.exports = router;

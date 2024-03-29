@@ -4,10 +4,12 @@ const {
   postNewService,
   deleteService,
   postServiceSale,
+  putService,
 } = require("../controllers/userControllers");
 const {
   postNewServiceValidations,
   postServiceSaleValidations,
+  putServiceValidations,
 } = require("../validations/service");
 const {
   authorizedOwner,
@@ -23,6 +25,8 @@ router.post(
   postNewServiceValidations,
   postNewService
 );
+
+router.put("/:sid", authorizedOwner, putServiceValidations, putService);
 
 router.delete("/:sid", authorizedOwner, deleteService);
 
