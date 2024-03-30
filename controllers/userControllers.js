@@ -400,7 +400,9 @@ exports.getAllProductSales = async (req, res, next) => {
 
 exports.getAllServicesSales = async (req, res, next) => {
   try {
-    const foundServices = await ServiceSale.find({}).populate("customerId");
+    const foundServices = await ServiceSale.find({})
+      .populate("customerId")
+      .exec();
     if (!foundServices) return res.sendStatus(404);
 
     res.status(200).json({
