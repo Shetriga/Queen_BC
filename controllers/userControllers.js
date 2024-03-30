@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 const Customer = require("../models/Customer");
 const Service = require("../models/Service");
+const Asset = require("../models/asset");
 const Reservation = require("../models/reservation");
 const ProductSale = require("../models/ProductSale");
 const ServiceSale = require("../models/ServiceSale");
@@ -399,7 +400,7 @@ exports.getAllProductSales = async (req, res, next) => {
 
 exports.getAllServicesSales = async (req, res, next) => {
   try {
-    const foundServices = await ServiceSale.find({});
+    const foundServices = await ServiceSale.find({}).populate("customerId");
     if (!foundServices) return res.sendStatus(404);
 
     res.status(200).json({
@@ -421,6 +422,21 @@ exports.putMarkReservationAsDone = async (req, res, next) => {
     foundReservation.status = "مكتمل";
     await foundReservation.save();
     res.sendStatus(200);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.getAllAssets = async (req, res, next) => {
+  try {
+    const foundAssets = await Asset.find({});
+    if (!foundAssets) return res.sendStatus(404);
+
+    res.status(200).json({
+      assets: foundAssets,
+    });
   } catch (e) {
     const error = new Error(e.message);
     error.statusCode = 500;
