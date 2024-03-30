@@ -21,6 +21,7 @@ const serviceSaleSchema = new Schema({
   ],
   customerId: {
     type: mongoose.Types.ObjectId,
+    ref: "Customer",
     required: true,
   },
   orderTotal: {
