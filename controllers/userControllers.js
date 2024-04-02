@@ -5,6 +5,7 @@ const Asset = require("../models/asset");
 const Reservation = require("../models/reservation");
 const ProductSale = require("../models/ProductSale");
 const ServiceSale = require("../models/ServiceSale");
+const Purchase = require("../models/purchase");
 const { validationResult } = require("express-validator");
 
 exports.getAllProducts = async (req, res, next) => {
@@ -438,6 +439,59 @@ exports.getAllAssets = async (req, res, next) => {
 
     res.status(200).json({
       assets: foundAssets,
+    });
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.postNewPurchase = async (req, res, next) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(401).json({
+      errorMessage: `Validation error: ${result.errors[0].msg}`,
+    });
+  }
+
+  const { purchaseName, purchaseQuantity, purchaseTotal, purchaseDate } =
+    req.body;
+
+  try {
+    const newPurchase = new Purchase({
+      purchaseName,
+      purchaseTotal,
+      purchaseQuantity,
+    });
+    if (purchaseDate) {
+      newPurchase.purchaseDate = purchaseDate;
+    } else {
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, "0");
+      let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      let yyyy = today.getFullYear();
+
+      today = mm + "/" + dd + "/" + yyyy;
+      newPurchase.purchaseDate = today;
+    }
+
+    await newPurchase.save();
+    res.sendStatus(201);
+  } catch (e) {
+    const error = new Error(e.message);
+    error.statusCode = 500;
+    return next(error);
+  }
+};
+
+exports.getAllPurchases = async (req, res, next) => {
+  try {
+    const foundPurchases = await Purchase.find({});
+    if (!foundPurchases) return res.sendStatus(404);
+
+    res.status(200).json({
+      purchases: foundPurchases,
     });
   } catch (e) {
     const error = new Error(e.message);
