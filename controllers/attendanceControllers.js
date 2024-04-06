@@ -1,4 +1,5 @@
 const Attendance = require("../models/attendance");
+const { validationResult } = require("express-validator");
 
 exports.postAttendance = async (req, res, next) => {
   const result = validationResult(req);
