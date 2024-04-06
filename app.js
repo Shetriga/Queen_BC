@@ -8,6 +8,7 @@ const customerRoutes = require("./routes/customersRoutes");
 const servicesRoutes = require("./routes/servicesRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const purchaseRoutes = require("./routes/purchaseRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
 const bodyParser = require("body-parser");
 
 // CORS Policy headers and permissions
@@ -33,6 +34,7 @@ app.use("/customer", customerRoutes);
 app.use("/service", servicesRoutes);
 app.use("/reservation", reservationRoutes);
 app.use("/purchase", purchaseRoutes);
+app.use("/attendance", attendanceRoutes);
 
 // Error Handler
 app.use((error, req, res, next) => {
