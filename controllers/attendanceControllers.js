@@ -1,5 +1,6 @@
 const Attendance = require("../models/attendance");
 const { validationResult } = require("express-validator");
+const { getDay } = require("../utils/functions");
 
 exports.postAttendance = async (req, res, next) => {
   const result = validationResult(req);
@@ -9,12 +10,19 @@ exports.postAttendance = async (req, res, next) => {
     });
   }
 
-  const { name, date, status } = req.body;
+  const { name, status } = req.body;
+
+  const today = getDay();
+  const currentTime = new Date()
+    .toLocaleString("en-GB", { timeZone: "Africa/Cairo" })
+    .split(" ")[1];
+
   try {
     const newAttendance = new Attendance({
       name,
-      date,
+      date: today,
       status,
+      time: currentTime,
     });
 
     await newAttendance.save();
