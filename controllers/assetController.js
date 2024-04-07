@@ -14,11 +14,12 @@ exports.postNewAsset = async (req, res, next) => {
     assetName,
     quantity,
     purchaseDate,
-    lastUpdateDate,
     unitPrice,
     totalPrice,
     expiryDate,
   } = req.body;
+
+  const lastUpdateDate = getDay();
 
   try {
     const newAsset = new Asset({
