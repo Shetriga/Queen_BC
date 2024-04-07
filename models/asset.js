@@ -12,7 +12,7 @@ const assetSchema = new Schema(
       required: true,
     },
     purchaseDate: {
-      type: Number,
+      type: String,
       required: true,
     },
     expiryDate: {
